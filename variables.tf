@@ -1,3 +1,5 @@
+variable "name" {}
+
 variable "region" {
   description = "The region you are deploying into"
 }
