@@ -92,3 +92,13 @@ resource "aws_security_group_rule" "grpc_ingress" {
   to_port = 7100
   protocol = "tcp"
 }
+
+resource "aws_security_group_rule" "consul_ingress" {
+  type = "ingress"
+  security_group_id = aws_security_group.grpc.id
+  cidr_blocks = [
+    "10.0.0.0/15"]
+  from_port = 9100
+  to_port = 9100
+  protocol = "tcp"
+}
