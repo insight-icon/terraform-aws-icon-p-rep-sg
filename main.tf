@@ -58,6 +58,17 @@ resource "aws_security_group_rule" "ssh_ingress" {
   protocol = "tcp"
 }
 
+resource "aws_security_group_rule" "bastion_ssh_ingress" {
+  count = var.bastion_security_group == "" ? 0 : 1
+
+  type = "ingress"
+  security_group_id = aws_security_group.grpc.id
+  from_port = 22
+  to_port = 22
+  protocol = "tcp"
+  source_security_group_id = var.bastion_security_group
+}
+
 resource "aws_security_group_rule" "testing_ssh_ingress" {
   count = var.corporate_ip == "" ? 1 : 0
 

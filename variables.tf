@@ -12,6 +12,11 @@ variable "resource_group" {
   description = "The grouping that is conventionally used to name resources"
 }
 
+variable "bastion_security_group" {
+  description = "Security group id of Bastion security group"
+  default = ""
+}
+
 variable "tags" {
   description = "Tags that are appended"
   type        = map(string)
