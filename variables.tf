@@ -8,10 +8,6 @@ variable "environment" {
   description = "The environment that generally corresponds to the account you are deploying into."
 }
 
-variable "resource_group" {
-  description = "The grouping that is conventionally used to name resources"
-}
-
 variable "bastion_security_group" {
   description = "Security group id of Bastion security group"
   default = ""
@@ -33,3 +29,13 @@ variable "corporate_ip" {
 //---------------------
 
 variable "vpc_id" {}
+
+variable "citizen_security_group_id" {
+  type = string
+  default = ""
+}
+
+variable "sentry_security_group_id" {
+  type = string
+  default = ""
+}

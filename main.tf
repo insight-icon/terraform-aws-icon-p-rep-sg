@@ -81,31 +81,60 @@ resource "aws_security_group_rule" "testing_ssh_ingress" {
   protocol = "tcp"
 }
 
-resource "aws_security_group_rule" "rest_ingress" {
+resource "aws_security_group_rule" "rest_ingress_standalone" {
+  count = var.citizen_security_group_id == "" ? 1 : 0
+
   type = "ingress"
   security_group_id = aws_security_group.rest.id
-  cidr_blocks = [
-    "0.0.0.0/0"]
   from_port = 9000
   to_port = 9000
   protocol = "tcp"
+
+  cidr_blocks = ["0.0.0.0/0"]
 }
 
-resource "aws_security_group_rule" "grpc_ingress" {
+resource "aws_security_group_rule" "rest_ingress_cluster" {
+  count = var.citizen_security_group_id == "" ? 0 : 1
+
+  type = "ingress"
+  security_group_id = aws_security_group.rest.id
+  from_port = 9000
+  to_port = 9000
+  protocol = "tcp"
+
+  source_security_group_id = var.citizen_security_group_id
+}
+
+
+resource "aws_security_group_rule" "grpc_ingress_standalone" {
+  count = var.sentry_security_group_id == "" ? 1 : 0
+
   type = "ingress"
   security_group_id = aws_security_group.grpc.id
-  cidr_blocks = [
-    "0.0.0.0/0"]
   from_port = 7100
   to_port = 7100
   protocol = "tcp"
+
+  cidr_blocks = ["0.0.0.0/0"]
 }
 
+resource "aws_security_group_rule" "grpc_ingress_cluster" {
+  count = var.sentry_security_group_id == "" ? 0 : 1
+
+  type = "ingress"
+  security_group_id = aws_security_group.grpc.id
+  from_port = 7100
+  to_port = 7100
+  protocol = "tcp"
+
+  source_security_group_id = var.sentry_security_group_id
+}
+
+// TODO: Lock this down
 resource "aws_security_group_rule" "consul_ingress" {
   type = "ingress"
   security_group_id = aws_security_group.grpc.id
-  cidr_blocks = [
-    "10.0.0.0/15"]
+  cidr_blocks = ["10.0.0.0/15"]
   from_port = 9100
   to_port = 9100
   protocol = "tcp"
